@@ -1,0 +1,761 @@
+openapi: 3.0.2
+info:
+  title: PGDB API
+  description: API documentation for PGDB endpoints
+  version: "1.0.0"
+servers:
+  - url: /cebits_pgdb
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+security:
+  - ApiKeyAuth: []
+paths:
+  /eee_info:
+    get:
+      summary: Get EEE Information
+      description: Retrieves EEE information for a given barcode.
+      parameters:
+        - name: eee_barcode
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The EEE barcode to fetch information for
+          example: EEE123456
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: "Basic "
+      responses:
+        '200':
+          description: Successful retrieval of EEE information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eee_info:
+                    type: array
+                    items:
+                      type: object
+                    description: EEE information details
+        '500':
+          description: Database connection failed
+    post:
+      summary: Update EEE Information
+      description: Updates EEE information based on the provided data.
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: "Basic "
+      requestBody:
+        description: EEE information to update
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eee_info:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      eee:
+                        type: string
+                        example: EEE071XC4
+                      fa_location:
+                        type: string
+                        example: "12239808"
+                      prime_clli:
+                        type: string
+                        example: "NCGDTXNC"
+                      rt_clli:
+                        type: string
+                        example: "NCGDTXU0269"
+              required:
+                - eee_info
+      responses:
+        '200':
+          description: Successful update of EEE information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Success:
+                    type: string
+                    example: Updates are captured successfully
+        '500':
+          description: Database connection failed
+
+  /equip_or_det_info:
+    get:
+      summary: Get Equipment or Detailed Information
+      description: Retrieves equipment or detailed information based on the request method.
+      parameters:
+        - name: eee_barcode
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The EEE barcode to fetch information for
+          example: EEE123456
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: "Basic "
+      responses:
+        '200':
+          description: Successful retrieval of information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  equip_details:
+                    type: array
+                    items:
+                      type: object
+                    description: Equipment details
+                  libdoc_equiptype:
+                    type: array
+                    items:
+                      type: object
+                    description: Library document equipment type details
+        '500':
+          description: Database connection failed
+    post:
+      summary: Update Equipment Details
+      description: Updates equipment details based on the provided data.
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: "Basic "
+        - name: eee_barcode
+          in: query
+          required: true
+          schema:
+            type: string
+          example: EEE123456
+      requestBody:
+        description: Equipment details to update
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                equip_details:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      alarm_gateway_network_element:
+                        type: string
+                        nullable: true
+                        example: null
+                      alarm_point:
+                        type: string
+                        nullable: true
+                        example: null
+                      cac_group_a:
+                        type: string
+                        nullable: true
+                        example: null
+                      cac_group_b:
+                        type: string
+                        nullable: true
+                        example: null
+                      cac_group_c:
+                        type: string
+                        nullable: true
+                        example: null
+                      cac_group_d:
+                        type: string
+                        nullable: true
+                        example: null
+                      cac_protect:
+                        type: string
+                        nullable: true
+                        example: null
+                      co_teo:
+                        type: string
+                        nullable: true
+                        example: null
+                      config:
+                        type: string
+                        example: " N/A"
+                      da_psa:
+                        type: string
+                        nullable: true
+                        example: null
+                      data_link:
+                        type: string
+                        nullable: true
+                        example: null
+                      det_barcode:
+                        type: string
+                        example: DET000709K8
+                      det_count:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            alarm_type:
+                              type: string
+                              example: " Unknown"
+                            cable_name:
+                              type: string
+                              example: "FN_I"
+                            cable_number:
+                              type: string
+                              example: "5216"
+                            communication_network_type:
+                              type: string
+                              example: " Unknown"
+                            hi_pair:
+                              type: integer
+                              example: 200
+                            id:
+                              type: integer
+                              example: 33046
+                            lo_pair:
+                              type: integer
+                              example: 1
+                            mode_name:
+                              type: string
+                              example: " Unknown"
+                            note:
+                              type: string
+                              example: "BP. 1801-2000"
+                            switch_interface_type:
+                              type: string
+                              example: " Unknown"
+                      det_sort:
+                        type: string
+                        nullable: true
+                        example: null
+                      det_status:
+                        type: string
+                        example: "in-use"
+                      det_tag:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 19330
+                            tag_name:
+                              type: string
+                              example: "VRAD"
+                      det_vacant_status:
+                        type: string
+                        nullable: true
+                        example: null
+                      det_vacant_type:
+                        type: string
+                        nullable: true
+                        example: null
+                      dlc_system_num:
+                        type: string
+                        nullable: true
+                        example: null
+                      equip_tid:
+                        type: string
+                        example: "SNTECAFR---01CAB101A"
+                      equipment_category:
+                        type: string
+                        example: "IP device"
+                      equipment_type:
+                        type: string
+                        example: "Alcatel 7330 ARAM-D"
+                      ewo:
+                        type: string
+                        nullable: true
+                        example: null
+                      feeder:
+                        type: string
+                        example: "fiber"
+                      feeder_clli:
+                        type: string
+                        example: "SNTECAFR"
+                      field_relay_rack:
+                        type: string
+                        example: "01CAB101A"
+                      gateway_network_element:
+                        type: string
+                        nullable: true
+                        example: null
+                      id:
+                        type: integer
+                        example: 372535
+                      ins_date:
+                        type: string
+                        format: date-time
+                        example: "Mon, 20 Dec 2010 00:00:00 GMT"
+                      inv_date:
+                        type: string
+                        format: date-time
+                        example: "Wed, 06 Jul 2016 11:38:40 GMT"
+                      inventory_by:
+                        type: string
+                        example: "SE3595"
+                      ipv4_address:
+                        type: string
+                        nullable: true
+                        example: null
+                      ipv6_address:
+                        type: string
+                        nullable: true
+                        example: null
+                      mac_address:
+                        type: string
+                        nullable: true
+                        example: null
+                      mic:
+                        type: string
+                        nullable: true
+                        example: null
+                      notes:
+                        type: string
+                        example: "SHELF A"
+                      office_relay_rack:
+                        type: string
+                        nullable: true
+                        example: null
+                      oin:
+                        type: string
+                        nullable: true
+                        example: null
+                      ok_number:
+                        type: string
+                        nullable: true
+                        example: null
+                      owner:
+                        type: string
+                        example: "C&E"
+                      pcn_info:
+                        type: array
+                        items:
+                          type: object
+                      pgdb_det_guid:
+                        type: string
+                        example: "DET000709K8"
+                      pgdb_update_user:
+                        type: string
+                        nullable: true
+                        example: null
+                      rt_teo:
+                        type: string
+                        nullable: true
+                        example: null
+                      scid:
+                        type: string
+                        nullable: true
+                        example: null
+                      serial_num:
+                        type: string
+                        nullable: true
+                        example: null
+                      total_node_ring_qty:
+                        type: string
+                        nullable: true
+                        example: null
+                      worddoc_date:
+                        type: string
+                        nullable: true
+                        example: null
+                libdoc_equiptype:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      doc_name:
+                        type: string
+                        example: "DOC0124"
+                      equpment_type:
+                        type: string
+                        example: "ALCATEL 7330 ARAM-D"
+                      id:
+                        type: integer
+                        example: 9479834
+                      url:
+                        type: string
+                        example: "http://apex.web.att.com/bookview/bookview.jsp?bookname=ATT-FLASH-000-000-536&"
+              required:
+                - equip_details
+                - libdoc_equiptype
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Success:
+                    type: string
+                    example: Updates are captured successfully
+
+  /str_info:
+    get:
+      summary: Get STR Information
+      description: Retrieves STR information for a given barcode.
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          example: "Basic "
+        - name: eee_barcode
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The EEE barcode to fetch STR information for
+          example: EEE123456
+      responses:
+        '200':
+          description: Successful retrieval of STR information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  str_info:
+                    type: array
+                    items:
+                      type: object
+                    description: STR information details
+        '500':
+          description: Database connection failed
+    post:
+      summary: Update STR Information
+      description: Updates STR information based on the provided data.
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          example: "Basic "
+      requestBody:
+        description: STR information to update
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                str_info:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      gpgga_string:
+                        type: string
+                        example: "$GPGGA,123442.0,3134.288421,N,09432.460792,W,1,05,0.9,117.5,M,-24.0,M,,*6B"
+                      str_barcode:
+                        type: string
+                        example: "STR00J4A59"
+                      str_number:
+                        type: integer
+                        example: 2
+              required:
+                - str_info
+      responses:
+        '200':
+          description: Successful update of STR information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Success:
+                    type: string
+                    example: Updates are captured successfully
+        '500':
+          description: Database connection failed
+
+  /battery_info:
+    get:
+      summary: Get Battery Information
+      description: Retrieves battery information for a given barcode.
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          example: "Basic "
+        - name: str_barcode
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The STR barcode to fetch battery information for
+          example: STR123456
+      responses:
+        '200':
+          description: Successful retrieval of battery information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bat_info:
+                    type: array
+                    items:
+                      type: object
+                    description: Battery information details
+        '500':
+          description: Database connection failed
+    post:
+      summary: Update Battery Information
+      description: Updates battery information based on the provided data.
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          example: "Basic "
+        - name: str_barcode
+          in: query
+          required: true
+          schema:
+            type: string
+          example: STR123456
+      requestBody:
+        description: Battery information to update
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bat_info:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      bat_barcode:
+                        type: string
+                        example: BAT01J0FN4
+                      bat_mfg_name:
+                        type: string
+                        example: C&D
+                      bat_model:
+                        type: string
+                        example: TEL12-80BST000
+                      bat_sort:
+                        type: string
+                        nullable: true
+                        example: null
+                      battery_aka:
+                        type: string
+                        example: TEL12-80
+                      height_inches:
+                        type: string
+                        example: "8.06"
+                      id:
+                        type: integer
+                        example: 250166
+                      installed_date:
+                        type: string
+                        format: date-time
+                        example: "Tue, 26 Sep 2006 00:00:00 GMT"
+                      length_inches:
+                        type: string
+                        example: "12.04"
+                      manufactured_date:
+                        type: string
+                        format: date-time
+                        example: "Tue, 26 Sep 2006 00:00:00 GMT"
+                      mhos:
+                        type: integer
+                        example: 1467
+                      notes:
+                        type: string
+                        nullable: true
+                        example: null
+                      serial_num:
+                        type: string
+                        nullable: true
+                        example: null
+                      str_barcode:
+                        type: string
+                        example: STR00J4A67
+                      technology_type:
+                        type: string
+                        example: VRLA
+                      total_weight_lbs:
+                        type: integer
+                        example: 68
+                      volt:
+                        type: integer
+                        example: 12
+                      warranty_expiry_date:
+                        type: string
+                        nullable: true
+                        example: null
+                      width_inches:
+                        type: string
+                        example: "6.83"
+                  required:
+                    - bat_barcode
+                    - bat_mfg_name
+                    - bat_model
+                    - bat_sort
+                    - battery_aka
+                    - height_inches
+                    - id
+                    - installed_date
+                    - length_inches
+                    - manufactured_date
+                    - mhos
+                    - notes
+                    - serial_num
+                    - str_barcode
+                    - technology_type
+                    - total_weight_lbs
+                    - volt
+                    - warranty_expiry_date
+                    - width_inches
+      responses:
+        '200':
+          description: Successful update of battery information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Success:
+                    type: string
+                    example: Updates are captured successfully
+        '500':
+          description: Database connection failed
+
+  /bat_test_info:
+    get:
+      summary: Get Battery Test Information
+      description: Retrieves battery test information for a given barcode.
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          example: "Basic "
+        - name: bat_barcode
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The battery barcode to fetch test information for
+          example: BAT123456
+      responses:
+        '200':
+          description: Successful retrieval of battery test information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bat_test_info:
+                    type: array
+                    items:
+                      type: object
+                    description: Battery test information details
+        '500':
+          description: Database connection failed
+    post:
+      summary: Update Battery Test Information
+      description: Updates battery test information based on the provided data.
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          example: "Basic "
+        - name: bat_barcode
+          in: query
+          required: true
+          schema:
+            type: string
+          example: BAT123456
+      requestBody:
+        description: Battery test information to update
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bat_test_info:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      attuid:
+                        type: string
+                        example: oq8562
+                      bat_barcode:
+                        type: string
+                        example: BAT02EZ3H6
+                      id:
+                        type: integer
+                        example: 351
+                      mhos:
+                        type: number
+                        nullable: true
+                        example: null
+                      mhos_percentile:
+                        type: string
+                        example: "109"
+                      str_barcode:
+                        type: string
+                        example: STR00LS7C2
+                      test_date:
+                        type: string
+                        format: date-time
+                        example: "Tue, 26 Nov 2019 00:00:00 GMT"
+                  required:
+                    - attuid
+                    - bat_barcode
+                    - id
+                    - mhos
+                    - mhos_percentile
+                    - str_barcode
+                    - test_date
+      responses:
+        '200':
+          description: Successful update of battery test information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Success:
+                    type: string
+                    example: Updates are captured successfully
+        '500':
+          description: Database connection failed
